@@ -89,7 +89,6 @@ func (h *SubscriptionHandler) CreateSubscription(w http.ResponseWriter, r *http.
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(sub)
 }
-
 func (h *SubscriptionHandler) GetSubscriptionByID(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)

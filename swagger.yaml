@@ -34,7 +34,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateSubscriptionRequest'
             example:
-              service_name: "Netflix"
+              service_name: "Apep"
               price: 999
               user_id: "1"
               start_date: "01-2026"
@@ -47,15 +47,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/Subscription'
               example:
-                id: "550e8400-e29b-41d4-a716-446655440001"
-                user_id: "550e8400-e29b-41d4-a716-446655440000"
-                service_name: "Netflix"
+                id: "1"
+                user_id: "1"
+                service_name: "Apep"
                 price: 999
                 start_month: 1
                 start_year: 2024
                 end_month: 12
                 end_year: 2024
-                created_at: "2024-01-15T10:30:00Z"
+                created_at: "2026-01-01T10:30:00Z"
         '400':
           description: Неверный запрос
           content:
@@ -79,7 +79,7 @@ paths:
       summary: Получить список подписок
       description: |
         Возвращает список всех подписок с возможностью фильтрации по user_id и service_name.
-        Если параметры не указаны, возвращаются все подписки.
+        Если параметры не указаны, возвращаются все подписки
       operationId: listSubscriptions
       parameters:
         - name: user_id
@@ -89,14 +89,14 @@ paths:
           schema:
             type: string
             format: uuid
-          example: "550e8400-e29b-41d4-a716-446655440000"
+          example: "1"
         - name: service_name
           in: query
           description: Название сервиса для фильтрации (частичное совпадение)
           required: false
           schema:
             type: string
-          example: "Netflix"
+          example: "Apep"
       responses:
         '200':
           description: Список подписок
@@ -107,24 +107,24 @@ paths:
                 items:
                   $ref: '#/components/schemas/Subscription'
               example:
-                - id: "550e8400-e29b-41d4-a716-446655440001"
-                  user_id: "550e8400-e29b-41d4-a716-446655440000"
-                  service_name: "Netflix"
+                - id: "1"
+                  user_id: "1"
+                  service_name: "Apep"
                   price: 999
                   start_month: 1
-                  start_year: 2024
+                  start_year: 2026
                   end_month: 12
-                  end_year: 2024
-                  created_at: "2024-01-15T10:30:00Z"
-                - id: "550e8400-e29b-41d4-a716-446655440002"
-                  user_id: "550e8400-e29b-41d4-a716-446655440000"
-                  service_name: "Spotify"
+                  end_year: 2026
+                  created_at: "2026-01-01T10:30:00Z"
+                - id: "1"
+                  user_id: "1"
+                  service_name: "Aboba"
                   price: 499
                   start_month: 2
                   start_year: 2024
                   end_month: null
                   end_year: null
-                  created_at: "2024-02-01T08:15:00Z"
+                  created_at: "2026-02-01T08:15:00Z"
 
   /subscriptions/{id}:
     get:
@@ -141,7 +141,7 @@ paths:
           schema:
             type: string
             format: uuid
-          example: "550e8400-e29b-41d4-a716-446655440001"
+          example: "1"
       responses:
         '200':
           description: Информация о подписке
@@ -150,14 +150,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/Subscription'
               example:
-                id: "550e8400-e29b-41d4-a716-446655440001"
-                user_id: "550e8400-e29b-41d4-a716-446655440000"
-                service_name: "Netflix"
+                id: "1"
+                user_id: "1"
+                service_name: "Apep"
                 price: 999
                 start_month: 1
-                start_year: 2024
+                start_year: 2026
                 end_month: 12
-                end_year: 2024
+                end_year: 2026
                 created_at: "2024-01-15T10:30:00Z"
         '400':
           description: Неверный формат ID
@@ -180,7 +180,7 @@ paths:
       tags:
         - subscriptions
       summary: Обновить подписку
-      description: Обновляет информацию о подписке. Все поля опциональны - обновляются только переданные поля.
+      description: Обновляет информацию о подписке. Все поля опциональны. Обновляются только переданные поля
       operationId: updateSubscription
       parameters:
         - name: id
@@ -190,7 +190,7 @@ paths:
           schema:
             type: string
             format: uuid
-          example: "550e8400-e29b-41d4-a716-446655440001"
+          example: "1"
       requestBody:
         required: true
         content:
@@ -198,10 +198,10 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateSubscriptionRequest'
             example:
-              service_name: "Netflix Premium"
+              service_name: "Apeppka"
               price: 1299
-              start_date: "02-2024"
-              end_date: "12-2024"
+              start_date: "02-2026"
+              end_date: "12-2026"
       responses:
         '200':
           description: Подписка успешно обновлена
@@ -210,15 +210,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/Subscription'
               example:
-                id: "550e8400-e29b-41d4-a716-446655440001"
-                user_id: "550e8400-e29b-41d4-a716-446655440000"
-                service_name: "Netflix Premium"
+                id: "1"
+                user_id: "1"
+                service_name: "Apeppka"
                 price: 1299
                 start_month: 2
                 start_year: 2024
                 end_month: 12
                 end_year: 2024
-                created_at: "2024-01-15T10:30:00Z"
+                created_at: "2026-01-01T10:30:00Z"
         '400':
           description: Неверный запрос
           content:
@@ -250,7 +250,7 @@ paths:
           schema:
             type: string
             format: uuid
-          example: "550e8400-e29b-41d4-a716-446655440001"
+          example: "1"
       responses:
         '204':
           description: Подписка успешно удалена
@@ -289,11 +289,11 @@ paths:
               $ref: '#/components/schemas/TotalCostRequest'
             example:
               start_month: 1
-              start_year: 2024
+              start_year: 2026
               end_month: 12
-              end_year: 2024
-              user_id: "550e8400-e29b-41d4-a716-446655440000"
-              service_name: "Netflix"
+              end_year: 2026
+              user_id: "1"
+              service_name: "Apep"
       responses:
         '200':
           description: Общая стоимость подписок
@@ -330,16 +330,16 @@ components:
           type: string
           format: uuid
           description: Уникальный идентификатор подписки
-          example: "550e8400-e29b-41d4-a716-446655440001"
+          example: "1"
         user_id:
           type: string
           format: uuid
           description: Идентификатор пользователя
-          example: "550e8400-e29b-41d4-a716-446655440000"
+          example: "1"
         service_name:
           type: string
           description: Название сервиса подписки
-          example: "Netflix"
+          example: "Apep"
         price:
           type: integer
           description: Цена подписки в месяц (в копейках или минимальных единицах валюты)
@@ -353,7 +353,7 @@ components:
         start_year:
           type: integer
           description: Год начала подписки
-          example: 2024
+          example: 2026
         end_month:
           type: integer
           nullable: true
@@ -365,12 +365,12 @@ components:
           type: integer
           nullable: true
           description: Год окончания подписки. null если подписка бессрочная
-          example: 2024
+          example: 2026
         created_at:
           type: string
           format: date-time
           description: Дата и время создания подписки
-          example: "2024-01-15T10:30:00Z"
+          example: "2024-01-01T10:30:00Z"
       required:
         - id
         - user_id
@@ -396,18 +396,18 @@ components:
           type: string
           format: uuid
           description: Идентификатор пользователя
-          example: "550e8400-e29b-41d4-a716-446655440000"
+          example: "1"
         start_date:
           type: string
           description: Дата начала подписки в формате MM-YYYY (например, "01-2024")
           pattern: '^\d{1,2}-\d{4}$'
-          example: "01-2024"
+          example: "01-2026"
         end_date:
           type: string
           nullable: true
           description: Дата окончания подписки в формате MM-YYYY (например, "12-2024"). Опционально, если не указано - подписка бессрочная
           pattern: '^\d{1,2}-\d{4}$'
-          example: "12-2024"
+          example: "12-2026"
       required:
         - service_name
         - price
@@ -430,13 +430,13 @@ components:
           type: string
           description: Новая дата начала подписки в формате MM-YYYY
           pattern: '^\d{1,2}-\d{4}$'
-          example: "02-2024"
+          example: "02-2026"
         end_date:
           type: string
           nullable: true
           description: Новая дата окончания подписки в формате MM-YYYY. Пустая строка удаляет дату окончания (делает подписку бессрочной)
           pattern: '^\d{1,2}-\d{4}$'
-          example: "12-2024"
+          example: "12-2026"
 
     TotalCostRequest:
       type: object
@@ -467,7 +467,7 @@ components:
           format: uuid
           nullable: true
           description: Опциональный фильтр по идентификатору пользователя
-          example: "550e8400-e29b-41d4-a716-446655440000"
+          example: "1"
         service_name:
           type: string
           nullable: true
