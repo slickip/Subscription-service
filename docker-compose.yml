@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: subscription_local_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: subsuser
+      POSTGRES_PASSWORD: subspass
+      POSTGRES_DB: subsdb
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  subscription-service:
+    build: .
+    container_name: subscription_service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+    environment:
+      - .env
+
+volumes:
+  pgdata:
