@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -80,6 +81,7 @@ func (h *SubscriptionHandler) CreateSubscription(w http.ResponseWriter, r *http.
 	}
 
 	if err := h.DB.Create(&sub).Error; err != nil {
+		log.Printf("failed to create subscription: %v", err)
 		http.Error(w, "Server error", http.StatusInternalServerError)
 		return
 	}
@@ -97,12 +99,14 @@ func (h *SubscriptionHandler) GetSubscriptionByID(w http.ResponseWriter, r *http
 	path := strings.TrimPrefix(r.URL.Path, "/subscriptions/")
 	id, err := uuid.FromString(path)
 	if err != nil {
+		log.Printf("invalid subscription id %q: %v", path, err)
 		http.Error(w, "Invalid ID", http.StatusBadRequest)
 		return
 	}
 
 	var sub models.Subscription
 	if err := h.DB.First(&sub, "id = ?", id).Error; err != nil {
+		log.Printf("subscription not found: %v", err)
 		http.Error(w, "Not found", http.StatusNotFound)
 		return
 	}
@@ -143,6 +147,7 @@ func (h *SubscriptionHandler) UpdateSubscription(w http.ResponseWriter, r *http.
 	path := strings.TrimPrefix(r.URL.Path, "/subscriptions/")
 	id, err := uuid.FromString(path)
 	if err != nil {
+		log.Printf("invalid subscription id %q: %v", path, err)
 		http.Error(w, "Invalid ID", http.StatusBadRequest)
 		return
 	}
@@ -155,12 +160,14 @@ func (h *SubscriptionHandler) UpdateSubscription(w http.ResponseWriter, r *http.
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		log.Printf("failed to decode update request: %v", err)
 		http.Error(w, "Bad request", http.StatusBadRequest)
 		return
 	}
 
 	var sub models.Subscription
 	if err := h.DB.First(&sub, "id = ?", id).Error; err != nil {
+		log.Printf("subscription not found for update: %v", err)
 		http.Error(w, "Not found", http.StatusNotFound)
 		return
 	}
@@ -174,6 +181,7 @@ func (h *SubscriptionHandler) UpdateSubscription(w http.ResponseWriter, r *http.
 	if req.StartDate != nil {
 		month, year, err := parseMonthYear(*req.StartDate)
 		if err != nil {
+			log.Printf("invalid start date %q: %v", *req.StartDate, err)
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
@@ -208,12 +216,14 @@ func (h *SubscriptionHandler) DeleteSubscription(w http.ResponseWriter, r *http.
 	path := strings.TrimPrefix(r.URL.Path, "/subscriptions/")
 	id, err := uuid.FromString(path)
 	if err != nil {
+		log.Printf("invalid subscription id %q: %v", path, err)
 		http.Error(w, "Invalid ID", http.StatusBadRequest)
 		return
 	}
 
 	result := h.DB.Delete(&models.Subscription{}, "id = ?", id)
 	if result.RowsAffected == 0 {
+		log.Printf("subscription not found for delete: %v", id)
 		http.Error(w, "Not found", http.StatusNotFound)
 		return
 	}
@@ -239,12 +249,13 @@ func (h *SubscriptionHandler) TotalCost(w http.ResponseWriter, r *http.Request) 
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		log.Printf("failed to decode total-cost request: %v", err)
 		http.Error(w, "Bad request", http.StatusBadRequest)
 		return
 	}
 
-	if req.StartMonth < 1 || req.StartMonth > 12 ||
-		req.EndMonth < 1 || req.EndMonth > 12 {
+	if req.StartMonth < 1 || req.StartMonth > 12 || req.EndMonth < 1 || req.EndMonth > 12 {
+		log.Printf("invalid month range: start_month=%d end_month=%d", req.StartMonth, req.EndMonth)
 		http.Error(w, "Invalid month", http.StatusBadRequest)
 		return
 	}
@@ -260,6 +271,7 @@ func (h *SubscriptionHandler) TotalCost(w http.ResponseWriter, r *http.Request) 
 
 	var subs []models.Subscription
 	if err := query.Find(&subs).Error; err != nil {
+		log.Printf("failed to query subscriptions for total cost: %v", err)
 		http.Error(w, "Server error", http.StatusInternalServerError)
 		return
 	}
